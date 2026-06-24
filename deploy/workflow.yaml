@@ -1,0 +1,51 @@
+# Cloud Workflows definition for the MongoDB → BigQuery Dataflow ETL.
+#
+# This workflow simply launches the Dataflow Flex Template. It is meant to be
+# called on a schedule by Cloud Scheduler (see deploy.sh), but you can also
+# trigger it manually:
+#   gcloud workflows run mongodb-bigquery-etl --location=REGION --project=PROJECT
+#
+# The __TOKENS__ below are substituted by deploy.sh at deploy time.
+
+main:
+  params: [args]
+  steps:
+    - init:
+        assign:
+          - project: "__PROJECT__"
+          - region: "__REGION__"
+          - template: "__TEMPLATE_PATH__"
+          - sa: "__RUNTIME_SA__"
+          - dlq: "__DLQ_TOPIC__"
+          - bucket: "__GCS_BUCKET__"
+          - mongo_uri: "__MONGO_URI__"
+          - mongo_db: "__MONGO_DB__"
+          - collections: "__COLLECTIONS__"
+          - bq_dataset: "__BQ_DATASET__"
+          - ts: ${string(int(sys.now()))}
+
+    - launch_dataflow_job:
+        call: http.post
+        args:
+          url: ${"https://dataflow.googleapis.com/v1b3/projects/" + project + "/locations/" + region + "/flexTemplates:launch"}
+          auth:
+            type: OAuth2
+          body:
+            launchParameter:
+              jobName: ${"mongodb-bigquery-etl-" + ts}
+              containerSpecGcsPath: ${template}
+              parameters:
+                mongo_uri: ${mongo_uri}
+                mongo_db: ${mongo_db}
+                collections: ${collections}
+                bq_project: ${project}
+                bq_dataset: ${bq_dataset}
+                dlq_topic: ${dlq}
+              environment:
+                serviceAccountEmail: ${sa}
+                tempLocation: ${"gs://" + bucket + "/tmp"}
+                stagingLocation: ${"gs://" + bucket + "/staging"}
+        result: launch_result
+
+    - done:
+        return: ${launch_result.body}
