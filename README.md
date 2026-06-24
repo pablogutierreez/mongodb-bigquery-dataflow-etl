@@ -9,6 +9,7 @@ handling**, **Cloud Monitoring metrics**, and a **row-count validation** step.
 
 > This repo is a clean, generic reference implementation. Fork it, drop in
 > your own config, and you have a serverless MongoDB → BigQuery sync.
+> It comes from the frustation of OOM errors from GitHub Actions since it can not process millions of documents.
 
 ---
 
