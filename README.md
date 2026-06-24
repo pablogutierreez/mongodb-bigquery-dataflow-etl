@@ -2,6 +2,8 @@
 
 A production-style, reusable **ETL template** that syncs MongoDB collections
 into BigQuery using **Apache Beam** on **Google Cloud Dataflow**.
+It comes from the frustation of OOM errors from GitHub Actions since it can not process millions of documents.
+
 
 It is built as a **Dataflow Flex Template** and runs on a daily schedule
 (**Cloud Scheduler → Cloud Workflows → Dataflow**), with **dead-letter
@@ -9,8 +11,6 @@ handling**, **Cloud Monitoring metrics**, and a **row-count validation** step.
 
 > This repo is a clean, generic reference implementation. Fork it, drop in
 > your own config, and you have a serverless MongoDB → BigQuery sync.
-> It comes from the frustation of OOM errors from GitHub Actions since it can not process millions of documents.
-
 ---
 
 ## Why Dataflow?
@@ -103,6 +103,7 @@ SELECT
 FROM `my-gcp-project.mongo_data.users`
 WHERE JSON_VALUE(json_data.status) = 'active';
 ```
+Also you can create views of the parameters in the doc that you want to see in your BigQuery Table.
 
 ### BSON type handling
 
