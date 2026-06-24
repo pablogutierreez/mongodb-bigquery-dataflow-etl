@@ -1,0 +1,48 @@
+{
+  "name": "MongoDB to BigQuery Dataflow ETL",
+  "description": "Syncs MongoDB collections to BigQuery. Normalises BSON to a native JSON column with a truncate-and-reload, and routes failed documents to a Pub/Sub dead-letter topic.",
+  "parameters": [
+    {
+      "name": "mongo_uri",
+      "label": "MongoDB URI or Secret Manager path",
+      "helpText": "MongoDB connection string, or a Secret Manager resource path of the form projects/PROJECT/secrets/NAME/versions/VERSION.",
+      "isOptional": false
+    },
+    {
+      "name": "mongo_db",
+      "label": "MongoDB database name",
+      "helpText": "Name of the MongoDB database to read from.",
+      "isOptional": false
+    },
+    {
+      "name": "collections",
+      "label": "Collections to sync",
+      "helpText": "Comma-separated list of collection names, e.g. users,orders,products.",
+      "isOptional": false
+    },
+    {
+      "name": "bq_project",
+      "label": "BigQuery project ID",
+      "helpText": "GCP project that owns the BigQuery dataset.",
+      "isOptional": false
+    },
+    {
+      "name": "bq_dataset",
+      "label": "BigQuery dataset",
+      "helpText": "BigQuery dataset the tables are written into (must already exist).",
+      "isOptional": false
+    },
+    {
+      "name": "dlq_topic",
+      "label": "Dead-letter Pub/Sub topic",
+      "helpText": "Full Pub/Sub topic path for dead-letter messages, e.g. projects/PROJECT/topics/mongo-etl-dlq. Leave empty to only log failures.",
+      "isOptional": true
+    },
+    {
+      "name": "table_suffix",
+      "label": "Table name suffix",
+      "helpText": "Optional suffix appended to every table name. Useful for test runs (e.g. _test).",
+      "isOptional": true
+    }
+  ]
+}
