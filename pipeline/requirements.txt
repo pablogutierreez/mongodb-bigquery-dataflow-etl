@@ -1,0 +1,13 @@
+# Apache Beam with GCP extras (Dataflow runner, BigQuery, GCS, Pub/Sub, etc.)
+apache-beam[gcp]==2.74.0
+
+# MongoDB driver
+pymongo==4.8.0
+
+# TLS root certificates for MongoDB Atlas (mongodb+srv) connections
+certifi==2024.7.4
+
+# Google Cloud client libraries used directly by the pipeline
+google-cloud-monitoring==2.30.0
+google-cloud-pubsub==2.23.0
+google-cloud-secret-manager==2.29.0
